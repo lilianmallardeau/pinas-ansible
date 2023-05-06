@@ -1,0 +1,53 @@
+---
+- name: Install basic stuff and utilities
+  hosts: all
+  become: yes
+
+  vars:
+    perform_full_upgrade: yes
+    install_python_tools: yes
+    install_media_tools: yes
+
+  pre_tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+    - name: Full system upgrade
+      apt:
+        upgrade: full
+      when: perform_full_upgrade
+  
+  tasks:
+    - name: Install some utilities and command line tools
+      apt:
+        name:
+          - bat
+          - command-not-found
+          - curl
+          - fd-find
+          - git
+          - htop
+          - tmux
+          - tree
+          - unzip
+          - vim
+          - wget
+          - zsh
+        state: present
+      
+    - name: Install pip and virtualenv
+      apt:
+        name:
+          - python3-pip
+          - python3-venv
+          - python3-virtualenv
+        state: present
+      when: install_python_tools
+
+    - name: Install some media tools
+      apt:
+        name:
+          - ffmpeg
+        state: present
+      when: install_media_tools

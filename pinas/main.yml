@@ -1,0 +1,41 @@
+---
+- name: PiNAS setup
+  hosts: pinas
+  become: true
+
+  vars_files:
+    - secrets.yml
+
+  tasks:
+    - import_tasks: tasks/fstab/main.yml
+    - import_tasks: tasks/raspi-reset/main.yml
+
+
+# Common stuff
+- import_playbook: ../playbooks/main.yml
+  vars:
+    perform_full_upgrade: no
+    install_python_tools: no
+    install_media_tools: no
+
+
+# Argon EON
+- import_playbook: ../playbooks/argon-eon/main.yml
+  vars:
+    enable_rtc_service: no
+    enable_lcd_and_fan_service: yes
+
+
+# DuckDNS
+- import_playbook: ../playbooks/duckdns/main.yml
+  vars:
+    duckdns_domain: "{{ duckdns_domain }}"
+    duckdns_token: "{{ duckdns_token }}"
+
+
+# Nextcloud
+# - import_playbook: ../playbooks/nextcloud/nextcloud.yml
+
+
+# Transmission
+# - import_playbook: ../playbooks/transmission/transmission.yml

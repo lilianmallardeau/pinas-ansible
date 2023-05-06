@@ -1,0 +1,20 @@
+---
+- name: Transmission setup
+  hosts: all
+  become: yes
+
+  pre_tasks:
+    - name: Update apt cache
+      apt: update_cache=true cache_valid_time=3600
+
+  tasks:
+    - name: Install transmission
+      apt: 
+        name: transmission
+        state: present
+
+    - name: Enable transmissiond
+      service:
+        name: transmissiond
+        state: started
+        enabled: yes

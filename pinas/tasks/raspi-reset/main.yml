@@ -1,0 +1,8 @@
+---
+- name: Copy the raspi-reset script
+  copy:
+    src: raspi-reset
+    dest: /usr/bin/raspi-reset
+    owner: root
+    group: root
+    mode: 0755

@@ -1,0 +1,25 @@
+---
+- name: Install DuckDNS cron job
+  hosts: all
+  become: yes
+
+  vars:
+    # Can be a comma separated (no spaces) list of domains
+    duckdns_domain:
+    duckdns_token:
+  
+  tasks:
+    - name: Install curl
+      apt:
+        name: curl
+        state: present
+    
+    - name: Install DuckDNS cron job for domain {{ duckdns_domain }}
+      cron:
+        name: "duckdns-{{ duckdns_domain }}"
+        user: root
+        day: "*"
+        hour: "*"
+        minute: "*/5"
+        job: curl -k -o /var/log/duckdns.log "https://www.duckdns.org/update?domains={{ duckdns_domain }}&token={{ duckdns_token }}&ip="
+        state: present
