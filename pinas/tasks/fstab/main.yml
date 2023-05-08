@@ -1,3 +1,8 @@
 ---
-# - name: Set fstab config
-#   fstab:
+- name: Add mount points for hard drives
+  mount:
+    src: "{{ item.device }}"
+    path: "{{ item.path }}"
+    fstype: "{{ item.fs }}"
+    state: mounted
+  with_items: "{{ disks }}"

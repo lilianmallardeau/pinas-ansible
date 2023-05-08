@@ -5,6 +5,7 @@
 
   vars:
     perform_full_upgrade: yes
+    install_common_tools: yes
     install_python_tools: yes
     install_media_tools: yes
 
@@ -28,6 +29,7 @@
           - fd-find
           - git
           - htop
+          - lshw
           - tmux
           - tree
           - unzip
@@ -35,6 +37,7 @@
           - wget
           - zsh
         state: present
+      when: install_common_tools
       
     - name: Install pip and virtualenv
       apt:

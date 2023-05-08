@@ -1,0 +1,10 @@
+---
+- name: reload transmission-daemon
+  service: name=transmission-daemon state=reloaded
+
+- name: restart transmission-daemon
+  service: name=transmission-daemon state=restarted
+
+- name: reload and restart transmission-daemon
+  service: name=transmission-daemon state=reloaded
+  notify: restart transmission-daemon

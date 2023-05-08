@@ -1,0 +1,21 @@
+---
+- name: Check for existing installation
+  service_facts:
+
+- name: Install Argon EON services
+  shell: curl https://download.argon40.com/argoneon.sh | bash
+  when: >
+    'argoneond.service' not in services or
+    'argononed.service' not in services
+
+- name: "{{ 'Enable' if argoneon_enable_rtc_service else 'Disable' }} RTC service"
+  service:
+    name: argoneond
+    state: "{{ 'started' if argoneon_enable_rtc_service else 'stopped' }}"
+    enabled: "{{ argoneon_enable_rtc_service }}"
+
+- name: "{{ 'Enable' if argoneon_enable_lcd_and_fan_service else 'Disable' }} LCD and fan service"
+  service:
+    name: argononed
+    state: "{{ 'started' if argoneon_enable_lcd_and_fan_service else 'stopped' }}"
+    enabled: "{{ argoneon_enable_lcd_and_fan_service }}"

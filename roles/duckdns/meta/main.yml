@@ -1,0 +1,13 @@
+galaxy_info:
+  author: Lilian Mallardeau
+  description: Setup a cron job for Duck DNS autoupdate
+  license: MIT
+
+  min_ansible_version: 2.1
+
+  galaxy_tags:
+    - duckdns
+    - dyndns
+    - networking
+
+dependencies: []

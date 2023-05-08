@@ -1,0 +1,127 @@
+---
+- name: Download Sury repository GPG key
+  get_url:
+    url: https://packages.sury.org/php/apt.gpg
+    dest: /usr/share/keyrings/deb.sury.org-php.gpg
+
+- name: Add Sury repository for PHP
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
+    filename: php
+    state: present
+    update_cache: true
+
+- name: Install Apache, PHP and Postgresql
+  apt: 
+    name: apache2, php, postgresql, python3-psycopg2, acl
+    state: latest
+
+- name: Ensure Apache and Postgresql are started and enabled
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - apache2
+    - postgresql
+
+- name: Create nextcloud db user
+  become_user: postgres
+  postgresql_user:
+    name: "{{ nextcloud_db_username }}"
+    password: "{{ nextcloud_db_password }}"
+    state: present
+
+- name: Create nextcloud db
+  become_user: postgres
+  postgresql_db:
+    name: "{{ nextcloud_db_name }}"
+    owner: "{{ nextcloud_db_username }}"
+    state: present
+
+- name: Install Nextcloud dependencies
+  apt:
+    name: 
+      - php-zip
+      - php-xml
+      - php-mbstring
+      - php-gd
+      - php-curl
+      - php-pgsql
+      - php-intl
+      - php-imagick
+      - php-gmp
+      - php-bcmath
+      - php-apcu
+      - php-bz2
+      - libmagickcore-6.q16-6-extra
+    state: latest
+
+- name: Copy nextcloud virtual host conf file
+  template:
+    src: nextcloud.conf
+    dest: /etc/apache2/sites-available/nextcloud.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable nextcloud site
+  command:
+    cmd: a2ensite nextcloud
+    creates: /etc/apache2/sites-enabled/nextcloud.conf
+  notify: reload apache2
+
+- name: Enable required apache modules
+  apache2_module:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - rewrite
+    - headers
+    - env
+    - dir
+    - mime
+    - ssl
+  notify: restart apache2
+
+- name: "Download nextcloud to {{ nextcloud_download_path }}"
+  get_url:
+    url: "{{ nextcloud_download_url }}"
+    dest: "{{ nextcloud_download_path }}"
+    checksum: "{{ nextcloud_checksum_url }}"
+
+- name: "Extract nextcloud to {{ nextcloud_www_folder }}"
+  unarchive:
+    src: "{{ nextcloud_download_path }}"
+    dest: "{{ nextcloud_www_folder }}"
+    remote_src: yes
+    creates: "{{ nextcloud_www_folder }}/nextcloud"
+  
+- name: "Copy nextcloud config file to {{ nextcloud_www_folder }}/nextcloud/config/config.php"
+  template:
+    src: config.php
+    dest: "{{ nextcloud_www_folder }}/nextcloud/config/config.php"
+    owner: www-data
+    group: www-data
+    mode: 0640
+  
+- name: "Set owner of {{ nextcloud_www_folder }}/nextcloud to www-data"
+  file:
+    path: "{{ nextcloud_www_folder }}/nextcloud"
+    owner: www-data
+    group: www-data
+    recurse: yes
+  
+- name: "Create data folder {{ nextcloud_data_directory }}"
+  file:
+    path: "{{ nextcloud_data_directory }}"
+    state: directory
+    owner: www-data
+    group: www-data
+
+- name: Setup cron job
+  cron:
+    name: Nextcloud cron
+    user: www-data
+    minute: "*/5"
+    job: php -f {{ nextcloud_www_folder }}/nextcloud/cron.php --define apc.enable_cli=1

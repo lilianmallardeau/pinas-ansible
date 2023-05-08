@@ -1,41 +1,57 @@
 ---
+- import_playbook: ../playbooks/common.yml
+  vars:
+    perform_full_upgrade: no
+    install_common_tools: yes
+    install_python_tools: yes
+    install_media_tools: yes
+
 - name: PiNAS setup
   hosts: pinas
   become: true
 
   vars_files:
     - secrets.yml
+  
+  vars:
+    # Argon EON
+    argoneon_enable_rtc_service: no
+    argoneon_enable_lcd_and_fan_service: yes
 
-  tasks:
+    # Nextcloud
+    nextcloud_db_name: nextcloud
+    nextcloud_www_folder: /var/www
+    nextcloud_data_directory: /srv/nextcloud
+    nextcloud_php_memory_limit: 4G
+
+    # Transmission
+    transmission_download_dir: "/srv/transmission/downloads"
+    transmission_incomplete_dir: "/srv/transmission/incomplete_downloads"
+    transmission_incomplete_dir_enabled: true
+
+    # Disks
+    disks:
+      - device: /dev/sda1
+        path: /mnt/hdd1
+        fs: ext4
+      - device: /dev/sdb1
+        path: /mnt/hdd2
+        fs: ext4
+
+    # Symlinks
+    symlinks:
+      - link: /srv/nextcloud
+        src: /mnt/hdd1/nextcloud
+      - link: /srv/transmission
+        src: /mnt/hdd1/transmission
+
+  roles:
+    - argon-eon
+    - duckdns
+    - nextcloud
+    - transmission
+
+  pre_tasks:
     - import_tasks: tasks/fstab/main.yml
+    - import_tasks: tasks/symlinks/main.yml
     - import_tasks: tasks/raspi-reset/main.yml
-
-
-# Common stuff
-- import_playbook: ../playbooks/main.yml
-  vars:
-    perform_full_upgrade: no
-    install_python_tools: no
-    install_media_tools: no
-
-
-# Argon EON
-- import_playbook: ../playbooks/argon-eon/main.yml
-  vars:
-    enable_rtc_service: no
-    enable_lcd_and_fan_service: yes
-
-
-# DuckDNS
-- import_playbook: ../playbooks/duckdns/main.yml
-  vars:
-    duckdns_domain: "{{ duckdns_domain }}"
-    duckdns_token: "{{ duckdns_token }}"
-
-
-# Nextcloud
-# - import_playbook: ../playbooks/nextcloud/nextcloud.yml
-
-
-# Transmission
-# - import_playbook: ../playbooks/transmission/transmission.yml

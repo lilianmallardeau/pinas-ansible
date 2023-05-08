@@ -1,0 +1,13 @@
+galaxy_info:
+  author: Lilian Mallardeau
+  description: Installs and configure Transmission daemon
+  license: MIT
+
+  min_ansible_version: 2.1
+
+  galaxy_tags:
+    - p2p
+    - torrent
+    - transmission
+
+dependencies: []

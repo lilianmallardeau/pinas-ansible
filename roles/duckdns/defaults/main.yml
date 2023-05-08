@@ -1,0 +1,12 @@
+---
+# Can be a comma separated (no spaces) list of domains
+duckdns_domain:
+
+# Token for DuckDNS API
+duckdns_token:
+
+# Log file
+duckdns_log_file: /var/log/duckdns.log
+
+# User to add cron job to
+duckdns_cronjob_user: root

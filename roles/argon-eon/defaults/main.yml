@@ -1,0 +1,3 @@
+---
+argoneon_enable_rtc_service: yes
+argoneon_enable_lcd_and_fan_service: yes
