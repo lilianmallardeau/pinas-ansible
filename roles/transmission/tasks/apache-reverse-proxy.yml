@@ -1,0 +1,39 @@
+---
+- block:
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Enable the Apache proxy and ssl modules
+      apache2_module:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - ssl
+        - proxy_http
+      notify: restart apache2
+  when: transmission_enable_apache_reverse_proxy
+
+- name: Copy Apache config file for Transmission
+  template:
+    src: transmission.conf
+    dest: /etc/apache2/sites-available/transmission.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload apache2
+
+- name: Enable transmission site
+  command:
+    cmd: a2ensite transmission
+    creates: /etc/apache2/sites-enabled/transmission.conf
+  when: transmission_enable_apache_reverse_proxy
+  notify: reload apache2
+
+- name: Disable transmission site
+  command:
+    cmd: a2dissite transmission
+    removes: /etc/apache2/sites-enabled/transmission.conf
+  when: not transmission_enable_apache_reverse_proxy
+  notify: reload apache2

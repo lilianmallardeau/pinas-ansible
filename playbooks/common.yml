@@ -29,7 +29,9 @@
           - fd-find
           - git
           - htop
+          - jq
           - lshw
+          - python3
           - tmux
           - tree
           - unzip

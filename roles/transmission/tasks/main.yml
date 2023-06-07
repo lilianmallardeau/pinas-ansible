@@ -1,6 +1,6 @@
 ---
 - name: Install transmission-daemon
-  apt: 
+  apt:
     name: transmission-daemon
     state: present
     update_cache: yes
@@ -21,3 +21,5 @@
   notify: reload and restart transmission-daemon
 
 - meta: flush_handlers
+
+- import_tasks: apache-reverse-proxy.yml

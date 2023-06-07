@@ -12,7 +12,7 @@
 
   vars_files:
     - secrets.yml
-  
+
   vars:
     # Argon EON
     argoneon_enable_rtc_service: no

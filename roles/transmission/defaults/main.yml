@@ -70,3 +70,6 @@ transmission_upload_limit: 100
 transmission_upload_limit_enabled: 0
 transmission_upload_slots_per_torrent: 14
 transmission_utp_enabled: true
+
+transmission_enable_apache_reverse_proxy: false
+transmission_reverse_proxy_domain_name: transmission.local
