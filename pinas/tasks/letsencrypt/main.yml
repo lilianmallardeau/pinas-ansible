@@ -1,0 +1,7 @@
+---
+- name: Copy Let's Encrypt certificates
+  copy:
+    src: letsencrypt.conf/
+    dest: /etc/letsencrypt
+    owner: root
+    group: root

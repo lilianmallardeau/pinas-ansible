@@ -55,3 +55,4 @@
     - import_tasks: tasks/fstab/main.yml
     - import_tasks: tasks/symlinks/main.yml
     - import_tasks: tasks/raspi-reset/main.yml
+    - import_tasks: tasks/letsencrypt/main.yml
