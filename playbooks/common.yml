@@ -4,10 +4,10 @@
   become: yes
 
   vars:
-    perform_full_upgrade: yes
+    perform_full_upgrade: no
     install_common_tools: yes
     install_python_tools: yes
-    install_media_tools: yes
+    install_media_tools: no
 
   pre_tasks:
     - name: Update apt cache

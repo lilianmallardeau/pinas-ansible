@@ -1,0 +1,28 @@
+---
+- name: Install Apache
+  apt:
+    name: apache2
+    state: present
+
+- name: Enable the Apache ssl module
+  apache2_module:
+    name: ssl
+    state: present
+
+- name: Copy config file for Apache SSL
+  template:
+    src: letsencrypt-ssl.conf.j2
+    dest: /etc/apache2/conf-available/letsencrypt-ssl.conf
+    owner: root
+    group: root
+    mode: 644
+
+- name: Enable SSL config file
+  command:
+    cmd: a2enconf letsencrypt-ssl
+    creates: /etc/apache2/conf-enabled/letsencrypt-ssl.conf
+
+- name: Restart apache2
+  service:
+    name: apache2
+    state: restarted

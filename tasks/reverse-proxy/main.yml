@@ -1,0 +1,23 @@
+---
+- name: Enable the Apache proxy module
+  apache2_module:
+    name: proxy_http
+    state: present
+
+- name: Copy Apache config file for Transmission
+  template:
+    src: transmission.conf.j2
+    dest: /etc/apache2/sites-available/transmission.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable transmission site
+  command:
+    cmd: a2ensite transmission
+    creates: /etc/apache2/sites-enabled/transmission.conf
+
+- name: Restart apache2
+  service:
+    name: apache2
+    state: restarted

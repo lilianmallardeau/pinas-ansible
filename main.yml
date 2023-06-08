@@ -1,5 +1,5 @@
 ---
-- import_playbook: ../playbooks/common.yml
+- import_playbook: playbooks/common.yml
   vars:
     perform_full_upgrade: no
     install_common_tools: yes
@@ -14,9 +14,11 @@
     - secrets.yml
 
   vars:
+    main_domain: "{{ duckdns_domain }}.duckdns.org"
+
     # Argon EON
-    argoneon_enable_rtc_service: no
-    argoneon_enable_lcd_and_fan_service: yes
+    argoneon_rtc_service_enabled: no
+    argoneon_fan_lcd_service_enabled: yes
 
     # Nextcloud
     nextcloud_db_name: nextcloud
@@ -32,18 +34,18 @@
     # Disks
     disks:
       - device: /dev/sda1
-        path: /mnt/hdd1
+        path: /mnt/hdd500
         fs: ext4
       - device: /dev/sdb1
-        path: /mnt/hdd2
+        path: /mnt/hdd750
         fs: ext4
 
     # Symlinks
     symlinks:
       - link: /srv/nextcloud
-        src: /mnt/hdd1/nextcloud
+        src: /mnt/hdd500/nextcloud
       - link: /srv/transmission
-        src: /mnt/hdd1/transmission
+        src: /mnt/hdd500/transmission
 
   roles:
     - argon-eon
@@ -56,3 +58,7 @@
     - import_tasks: tasks/symlinks/main.yml
     - import_tasks: tasks/raspi-reset/main.yml
     - import_tasks: tasks/letsencrypt/main.yml
+    - import_tasks: tasks/apache/main.yml
+
+  tasks:
+    - import_tasks: tasks/reverse-proxy/main.yml

@@ -5,4 +5,4 @@
     path: "{{ item.path }}"
     fstype: "{{ item.fs }}"
     state: mounted
-  with_items: "{{ disks }}"
+  loop: "{{ disks }}"

@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+	ServerName transmission.{{ main_domain }}
+	Redirect permanent / https://transmission.{{ main_domain }}/
+</VirtualHost>
+
+<VirtualHost *:443>
+	ServerName transmission.{{ main_domain }}
+
+	ProxyPass "/" "http://localhost:{{ transmission_rpc_port }}/"
+	ProxyPassReverse "/" "http://localhost:{{ transmission_rpc_port }}/"
+</VirtualHost>

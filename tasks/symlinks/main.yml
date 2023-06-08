@@ -1,8 +1,14 @@
 ---
+- name: Create directories for symlinks targets
+  file:
+    path: "{{ item.src }}"
+    state: directory
+  loop: "{{ symlinks }}"
+
 - name: Set symlinks for services to folders in drives
   file:
     src: "{{ item.src }}"
     dest: "{{ item.link }}"
     state: link
     force: yes
-  with_items: "{{ symlinks }}"
+  loop: "{{ symlinks }}"

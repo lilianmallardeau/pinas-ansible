@@ -1,0 +1,9 @@
+<VirtualHost *:443>
+	SSLCertificateFile /etc/letsencrypt/live/{{ main_domain }}/fullchain.pem
+	SSLCertificateKeyFile /etc/letsencrypt/live/{{ main_domain }}/privkey.pem
+	Include /etc/letsencrypt/options-ssl-apache.conf
+
+	<IfModule mod_headers.c>
+		Header always set Strict-Transport-Security "max-age=15552000"
+	</IfModule>
+</VirtualHost>
