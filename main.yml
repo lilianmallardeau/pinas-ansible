@@ -50,6 +50,7 @@
   roles:
     - argon-eon
     - duckdns
+    - wireguard
     - nextcloud
     - transmission
 
