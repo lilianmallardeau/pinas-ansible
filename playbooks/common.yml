@@ -31,6 +31,7 @@
           - htop
           - jq
           - lshw
+          - lsof
           - python3
           - tmux
           - tree
