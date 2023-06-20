@@ -6,3 +6,12 @@
     fstype: "{{ item.fs }}"
     state: mounted
   loop: "{{ disks }}"
+
+- name: Add bind mounts
+  mount:
+    src: "{{ item.src }}"
+    path: "{{ item.mnt }}"
+    opts: bind
+    fstype: none
+    state: mounted
+  loop: "{{ bind_mounts }}"

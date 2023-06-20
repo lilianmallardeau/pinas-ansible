@@ -42,10 +42,13 @@
 
     # Symlinks
     symlinks:
-      - link: /srv/nextcloud
-        src: /mnt/hdd500/nextcloud
-      - link: /srv/transmission
-        src: /mnt/hdd500/transmission
+      - src: /mnt/hdd500/transmission
+        link: /srv/transmission
+
+    # Bind mounts
+    bind_mounts:
+      - src: /mnt/hdd500/nextcloud
+        mnt: /srv/nextcloud
 
   roles:
     - argon-eon
