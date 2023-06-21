@@ -41,3 +41,8 @@ symlinks:
 bind_mounts:
   - src: /mnt/hdd500/nextcloud
     mnt: /srv/nextcloud
+
+# Groups
+user_groups:
+  - www-data
+  - debian-transmission
