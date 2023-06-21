@@ -8,21 +8,34 @@
   apache2_module:
     name: ssl
     state: present
-
-- name: Copy config file for Apache SSL
-  template:
-    src: letsencrypt-ssl.conf.j2
-    dest: /etc/apache2/conf-available/letsencrypt-ssl.conf
-    owner: root
-    group: root
-    mode: 644
-
-- name: Enable SSL config file
-  command:
-    cmd: a2enconf letsencrypt-ssl
-    creates: /etc/apache2/conf-enabled/letsencrypt-ssl.conf
+  register: _apache_enabled_ssl_module
 
 - name: Restart apache2
   service:
     name: apache2
     state: restarted
+  when: _apache_enabled_ssl_module.changed
+
+- name: Disable default site
+  command:
+    cmd: a2dissite 000-default
+    removes: /etc/apache2/sites-enabled/000-default.conf
+  register: _apache_disabled_default_site
+
+- name: Copy Apache config files to /etc/apache2/sites-enabled
+  template:
+    src: "{{ item }}"
+    dest: "/etc/apache2/sites-enabled/{{ item.rstrip('.j2') | basename }}"
+    owner: root
+    group: root
+    mode: 644
+  with_fileglob:
+    - "*.conf.j2"
+    - "*.conf"
+  register: _apache_config
+
+- name: Reload apache2
+  service:
+    name: apache2
+    state: reloaded
+  when: _apache_config.changed or _apache_disabled_default_site.changed
