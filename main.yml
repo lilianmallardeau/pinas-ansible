@@ -11,44 +11,8 @@
   become: true
 
   vars_files:
-    - secrets.yml
-
-  vars:
-    main_domain: "{{ duckdns_domain }}.duckdns.org"
-
-    # Argon EON
-    argoneon_rtc_service_enabled: no
-    argoneon_fan_lcd_service_enabled: yes
-
-    # Nextcloud
-    nextcloud_db_name: nextcloud
-    nextcloud_www_folder: /var/www
-    nextcloud_data_directory: /srv/nextcloud
-    nextcloud_php_memory_limit: 4G
-
-    # Transmission
-    transmission_download_dir: "/srv/transmission/downloads"
-    transmission_incomplete_dir: "/srv/transmission/incomplete_downloads"
-    transmission_incomplete_dir_enabled: true
-
-    # Disks
-    disks:
-      - device: /dev/sda1
-        path: /mnt/hdd500
-        fs: ext4
-      - device: /dev/sdb1
-        path: /mnt/hdd750
-        fs: ext4
-
-    # Symlinks
-    symlinks:
-      - src: /mnt/hdd500/transmission
-        link: /srv/transmission
-
-    # Bind mounts
-    bind_mounts:
-      - src: /mnt/hdd500/nextcloud
-        mnt: /srv/nextcloud
+    - vars/main.yml
+    - vars/secrets.yml
 
   roles:
     - argon-eon

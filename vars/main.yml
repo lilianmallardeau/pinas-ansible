@@ -1,0 +1,43 @@
+---
+main_domain: "{{ duckdns_domain }}.duckdns.org"
+
+# Argon EON
+argoneon_rtc_service_enabled: no
+argoneon_fan_lcd_service_enabled: yes
+
+# Nextcloud
+nextcloud_data_directory: /srv/nextcloud
+nextcloud_php_memory_limit: 4G
+nextcloud_enable_ssl: yes
+nextcloud_enable_hsts: yes
+nextcloud_php_opcache_enable_jit: yes
+nextcloud_default_phone_region: FR
+nextcloud_install_recommended_apps: yes
+nextcloud_install_suggested_apps: yes
+nextcloud_apps:
+  - unsplash
+  - maps
+
+# Transmission
+transmission_download_dir: "/srv/transmission/downloads"
+transmission_incomplete_dir: "/srv/transmission/incomplete_downloads"
+transmission_incomplete_dir_enabled: true
+
+# Disks
+disks:
+  - device: /dev/sda1
+    path: /mnt/hdd500
+    fs: ext4
+  - device: /dev/sdb1
+    path: /mnt/hdd750
+    fs: ext4
+
+# Symlinks
+symlinks:
+  - src: /mnt/hdd500/transmission
+    link: /srv/transmission
+
+# Bind mounts
+bind_mounts:
+  - src: /mnt/hdd500/nextcloud
+    mnt: /srv/nextcloud
