@@ -1,0 +1,17 @@
+<Macro ssl_stuff $certificate_name>
+	SSLCertificateFile /etc/letsencrypt/live/$certificate_name/fullchain.pem
+	SSLCertificateKeyFile /etc/letsencrypt/live/$certificate_name/privkey.pem
+	Include /etc/letsencrypt/options-ssl-apache.conf
+</Macro>
+
+
+<VirtualHost *:443>
+	Use ssl_stuff *.{{ main_domain }}
+	Use default_config
+</VirtualHost>
+
+<VirtualHost *:443>
+	ServerName {{ main_domain }}
+	Use ssl_stuff {{ main_domain }}
+	Use default_config
+</VirtualHost>

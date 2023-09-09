@@ -1,7 +1,12 @@
-<VirtualHost *:80 *:*>
+<Macro default_config>
 	<Location />
 		Deny from all
 		Options None
 		ErrorDocument 403 Forbidden.
 	</Location>
+</Macro>
+
+
+<VirtualHost *:80 *:*>
+	Use default_config
 </VirtualHost>

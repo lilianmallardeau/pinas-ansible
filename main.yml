@@ -29,8 +29,6 @@
     - import_tasks: tasks/apache/main.yml
 
   tasks:
-    - import_tasks: tasks/reverse-proxy/main.yml
-
     - name: Add user {{ username }} to groups {{ ', '.join(user_groups) }}
       user:
         name: "{{ username }}"

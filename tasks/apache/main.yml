@@ -4,38 +4,49 @@
     name: apache2
     state: present
 
-- name: Enable the Apache ssl module
+- name: Enable necessary apache modules
   apache2_module:
-    name: ssl
+    name: "{{ item }}"
     state: present
-  register: _apache_enabled_ssl_module
+  loop:
+    - ssl
+    - macro
+    - proxy_http
+  register: apache_modules
 
 - name: Restart apache2
   service:
     name: apache2
     state: restarted
-  when: _apache_enabled_ssl_module.changed
+  when: apache_modules.changed
 
 - name: Disable default site
   command:
     cmd: a2dissite 000-default
     removes: /etc/apache2/sites-enabled/000-default.conf
-  register: _apache_disabled_default_site
+  register: apache_disable_default_site
 
-- name: Copy Apache config files to /etc/apache2/sites-enabled
+- name: Copy Apache config files to /etc/apache2/sites-available
   template:
     src: "{{ item }}"
-    dest: "/etc/apache2/sites-enabled/{{ item.rstrip('.j2') | basename }}"
+    dest: "/etc/apache2/sites-available/{{ item.removesuffix('.j2') | basename }}"
     owner: root
     group: root
     mode: 644
   with_fileglob:
-    - "*.conf.j2"
-    - "*.conf"
-  register: _apache_config
+    - "sites-available/*.conf.j2"
+    - "sites-available/*.conf"
+  register: apache_config_files
+
+- name: Enable corresponding virtualhosts
+  command:
+    cmd: a2ensite {{ item }}
+    creates: /etc/apache2/sites-enabled/{{ item }}
+  loop: "{{ apache_config_files.results | map(attribute='dest') | map('basename') }}"
+  register: apache_enable_virtualhosts
 
 - name: Reload apache2
   service:
     name: apache2
     state: reloaded
-  when: _apache_config.changed or _apache_disabled_default_site.changed
+  when: apache_config_files.changed or apache_enable_virtualhosts.changed or apache_disable_default_site.changed
