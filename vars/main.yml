@@ -36,6 +36,8 @@ disks:
 symlinks:
   - src: /mnt/hdd500/transmission
     link: /srv/transmission
+  - src: /mnt/hdd500/letsencrypt
+    link: /etc/letsencrypt
 
 # Bind mounts
 bind_mounts:
