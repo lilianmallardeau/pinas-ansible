@@ -20,6 +20,14 @@
     state: restarted
   when: apache_modules.changed
 
+- name: Create /etc/letsencrypt/options-ssl-apache.conf for apache SSL config
+  command:
+    cmd: certbot install
+    stdin: "c"
+    creates: /etc/letsencrypt/options-ssl-apache.conf
+  register: certbot_install_cert
+  failed_when: certbot_install_cert.rc > 1
+
 - name: Disable default site
   command:
     cmd: a2dissite 000-default
