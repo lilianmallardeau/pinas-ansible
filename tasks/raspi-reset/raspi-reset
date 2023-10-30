@@ -1,12 +1,11 @@
 #!/bin/bash
-
-BOOTFS_SOURCE=/dev/mmcblk0p3
-BOOTFS_TARGET=/dev/mmcblk0p1
-ROOTFS_SOURCE=/dev/mmcblk0p2
-ROOTFS_TARGET=/dev/mmcblk0p4
-ROOT_DEV=/dev/mmcblk0
 BS=64M
-DISKID=544c6228
+DISK_ID=0x7788c428
+ROOT_DEV=/dev/mmcblk0
+BOOTFS_BACKUP=${ROOT_DEV}p3
+BOOTFS_TARGET=${ROOT_DEV}p1
+ROOTFS_BACKUP=${ROOT_DEV}p2
+ROOTFS_TARGET=${ROOT_DEV}p4
 
 if [ $EUID -ne 0 ]; then
     echo Must be run as root 1>&2
@@ -18,19 +17,13 @@ echo 1 > /proc/sys/kernel/sysrq
 echo u > /proc/sysrq-trigger
 
 echo Overwritting bootfs...
-dd if=$BOOTFS_SOURCE of=$BOOTFS_TARGET bs=$BS status=progress
+dd if=$BOOTFS_BACKUP of=$BOOTFS_TARGET bs=$BS status=progress
 
 echo Overwritting rootfs...
-dd if=$ROOTFS_SOURCE of=$ROOTFS_TARGET bs=$BS status=progress
+dd if=$ROOTFS_BACKUP of=$ROOTFS_TARGET bs=$BS status=progress
 
 echo Restoring original disk id...
-fdisk "$ROOT_DEV" > /dev/null <<EOF
-x
-i
-0x$DISKID
-r
-w
-EOF
+sfdisk --disk-id $ROOT_DEV $DISK_ID
 
 # echo Checking and resizing filesystem...
 # e2fsck -f $ROOTFS_TARGET
