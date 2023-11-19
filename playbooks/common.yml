@@ -43,12 +43,13 @@
         state: present
       when: install_common_tools
       
-    - name: Install pip and virtualenv
+    - name: Install pip, pipx and virtualenv
       apt:
         name:
           - python3-pip
           - python3-venv
           - python3-virtualenv
+          - pipx
         state: present
       when: install_python_tools
 

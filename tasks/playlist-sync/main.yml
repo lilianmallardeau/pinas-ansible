@@ -1,0 +1,26 @@
+---
+- name: Install playlist-sync and scdl
+  community.general.pipx:
+    name: "{{ item }}"
+    state: present
+    install_deps: yes
+  environment:
+    PIPX_HOME: /opt/pipx
+    PIPX_BIN_DIR: /usr/local/bin
+  loop:
+    - playlist-sync
+    - scdl
+
+- name: Add PATH for cron jobs
+  cron:
+    user: "{{ username }}"
+    name: PATH
+    env: yes
+    value: /usr/bin:/bin:/usr/local/bin
+
+- name: Add cron job to start playlist-sync and scdl at reboot
+  cron:
+    name: playlist-sync
+    user: "{{ username }}"
+    special_time: reboot
+    job: tmux new-session -d -s playlist-sync "/data/Music/sync.sh; bash; "
