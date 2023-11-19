@@ -1,14 +1,21 @@
 ---
 - name: Create directories for symlinks targets
   file:
-    path: "{{ item.src }}"
+    path: "{{ item.target }}"
     state: directory
-  loop: "{{ symlinks }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    mode: "{{ item.mode | default(omit) }}"
+  loop: "{{ symlinks_dir }}"
 
-- name: Set symlinks for services to folders in drives
+- name: Create symlinks
   file:
-    src: "{{ item.src }}"
+    src: "{{ item.target }}"
     dest: "{{ item.link }}"
     state: link
     force: yes
-  loop: "{{ symlinks }}"
+    follow: no
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    mode: "{{ item.mode | default(omit) }}"
+  loop: "{{ symlinks_dir }}"

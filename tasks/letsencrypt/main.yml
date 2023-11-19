@@ -49,8 +49,6 @@
         --keep-until-expiring
         --cert-name "{{ item }}"
         -d "{{ item }}"
-  loop:
-    - "{{ duckdns_domain }}.duckdns.org"
-    - "*.{{ duckdns_domain }}.duckdns.org"
+  loop: "{{ certbot_domains }}"
   register: certbot_call
   changed_when: "'no action taken' not in certbot_call.stdout"

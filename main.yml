@@ -12,6 +12,7 @@
 
   vars_files:
     - vars/main.yml
+    - vars/storage.yml
     - vars/secrets.yml
 
   roles:
@@ -20,6 +21,7 @@
     - wireguard
     - nextcloud
     - transmission
+    - syncthing
 
   pre_tasks:
     - import_tasks: tasks/fstab/main.yml

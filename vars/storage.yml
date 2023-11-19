@@ -1,0 +1,23 @@
+---
+# Disks
+disks:
+  - device: /dev/sda1
+    path: /mnt/hdd500
+    fs: ext4
+  - device: /dev/sdb1
+    path: /mnt/hdd750
+    fs: ext4
+
+# Bind mounts
+bind_mounts:
+  - src: /mnt/hdd750
+    mnt: /data
+
+# Symlinks (folders only!)
+symlinks_dir:
+  - link: /etc/letsencrypt
+    target: /data/config/letsencrypt
+  - link: /home/{{ username }}/.config
+    target: /data/{{ username }}/.config
+    owner: "{{ username }}"
+    group: "{{ username }}"
