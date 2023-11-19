@@ -49,3 +49,11 @@
         key: "{{ lookup('file', '{{ item }}') }}"
         state: present
       loop: "{{ ssh_keys }}"
+
+    - name: Copy some dotfiles
+      become: yes
+      become_user: "{{ username }}"
+      copy:
+        src: "{{ item }}"
+        dest: "{{ item }}"
+      loop: "{{ dotfiles }}"
