@@ -41,3 +41,10 @@
         name: "{{ username }}"
         groups: "{{ user_groups }}"
         append: yes
+
+    - name: Add SSH keys
+      authorized_key:
+        user: "{{ username }}"
+        key: "{{ lookup('file', '{{ item }}') }}"
+        state: present
+      loop: "{{ ssh_keys }}"
