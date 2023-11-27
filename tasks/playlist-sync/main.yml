@@ -11,12 +11,17 @@
     - playlist-sync
     - scdl
 
-- name: Add PATH for cron jobs
+- name: Setup PATH and SHELL environment variables for cron jobs
   cron:
     user: "{{ username }}"
-    name: PATH
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
     env: yes
-    value: /usr/bin:/bin:/usr/local/bin
+  loop:
+    - name: PATH
+      value: /usr/local/bin:/usr/bin:/bin
+    - name: SHELL
+      value: /bin/bash
 
 - name: Add cron job to start playlist-sync and scdl at reboot
   cron:
