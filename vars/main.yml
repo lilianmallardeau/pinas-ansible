@@ -2,6 +2,7 @@
 # Dotfiles
 dotfiles:
   - "~/.tmux.conf"
+  - "~/.vimrc"
 
 # Argon EON
 argoneon_rtc_service_enabled: no
