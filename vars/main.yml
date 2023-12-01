@@ -8,7 +8,7 @@ argoneon_rtc_service_enabled: no
 argoneon_fan_lcd_service_enabled: yes
 
 # Nextcloud
-nextcloud_data_directory: /data/nextcloud
+nextcloud_data_directory: /appdata/nextcloud
 nextcloud_php_memory_limit: 4G
 nextcloud_enable_ssl: yes
 nextcloud_enable_hsts: yes

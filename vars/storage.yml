@@ -10,13 +10,15 @@ disks:
 
 # Bind mounts
 bind_mounts:
-  - src: /mnt/hdd750
+  - src: /mnt/hdd750/data
     mnt: /data
+  - src: /mnt/hdd750/appdata
+    mnt: /appdata
 
 # Symlinks (folders only!)
 symlinks_dir:
   - link: /etc/letsencrypt
-    target: /data/config/letsencrypt
+    target: /appdata/letsencrypt
   - link: /home/{{ username }}/.config
     target: /data/{{ username }}/.config
     owner: "{{ username }}"
