@@ -34,6 +34,7 @@
           - lsof
           - ncdu
           - python3
+          - tcpdump
           - tmux
           - tree
           - unzip
