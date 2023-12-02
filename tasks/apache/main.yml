@@ -28,33 +28,57 @@
   register: certbot_install_cert
   failed_when: certbot_install_cert.rc > 1
 
-- name: Disable default site
-  command:
-    cmd: a2dissite 000-default
-    removes: /etc/apache2/sites-enabled/000-default.conf
-  register: apache_disable_default_site
+- name: Copy ports.conf to /etc/apache2/ports.conf
+  template:
+    src: ports.conf
+    dest: /etc/apache2/ports.conf
+    owner: root
+    group: root
+    mode: 644
+  register: apache_ports_conf_file
 
-- name: Copy Apache config files to /etc/apache2/sites-available
+- name: Copy Apache config files and virtualhosts to /etc/apache2/
   template:
     src: "{{ item }}"
-    dest: "/etc/apache2/sites-available/{{ item.removesuffix('.j2') | basename }}"
+    dest: "/etc/apache2/{{ item | dirname | basename }}/{{ item.removesuffix('.j2') | basename }}"
     owner: root
     group: root
     mode: 644
   with_fileglob:
     - "sites-available/*.conf.j2"
     - "sites-available/*.conf"
+    - "conf-available/*.conf.j2"
+    - "conf-available/*.conf"
   register: apache_config_files
+
+- name: Enable corresponding config files
+  command:
+    cmd: a2enconf {{ item.removesuffix('.j2') | basename }}
+    creates: /etc/apache2/conf-enabled/{{ item.removesuffix('.j2') | basename }}
+  with_fileglob:
+    - "conf-available/*.conf.j2"
+    - "conf-available/*.conf"
+  loop_control:
+    label: "{{ item.removesuffix('.j2') | basename }}"
+  register: apache_conf_enabled
 
 - name: Enable corresponding virtualhosts
   command:
-    cmd: a2ensite {{ item }}
-    creates: /etc/apache2/sites-enabled/{{ item }}
-  loop: "{{ apache_config_files.results | map(attribute='dest') | map('basename') }}"
-  register: apache_enable_virtualhosts
+    cmd: a2ensite {{ item.removesuffix('.j2') | basename }}
+    creates: /etc/apache2/sites-enabled/{{ item.removesuffix('.j2') | basename }}
+  with_fileglob:
+    - "sites-available/*.conf.j2"
+    - "sites-available/*.conf"
+  loop_control:
+    label: "{{ item.removesuffix('.j2') | basename }}"
+  register: apache_virtualhosts_enabled
 
 - name: Reload apache2
   service:
     name: apache2
     state: reloaded
-  when: apache_config_files.changed or apache_enable_virtualhosts.changed or apache_disable_default_site.changed
+  when: >
+    apache_ports_conf_file.changed or
+    apache_config_files.changed or
+    apache_conf_enabled.changed or
+    apache_virtualhosts_enabled.changed
