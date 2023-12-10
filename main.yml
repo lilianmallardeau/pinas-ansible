@@ -1,5 +1,6 @@
 ---
 - import_playbook: playbooks/common.yml
+  tags: common
   vars:
     perform_full_upgrade: no
     install_common_tools: yes
@@ -16,37 +17,40 @@
     - vars/secrets.yml
 
   roles:
-    - argon-eon
-    - duckdns
-    - wireguard
-    - docker
-    - syncthing
-    - transmission
-    - nextcloud
+    - { role: argon-eon, tags: argon }
+    - { role: duckdns, tags: duckdns }
+    - { role: wireguard, tags: wireguard }
+    - { role: docker, tags: docker }
+    - { role: syncthing, tags: syncthing }
+    - { role: transmission, tags: transmission }
+    - { role: nextcloud, tags: nextcloud }
 
   pre_tasks:
-    - import_tasks: tasks/fstab/main.yml
-    - import_tasks: tasks/symlinks/main.yml
-    - import_tasks: tasks/raspi-reset/main.yml
+    - { import_tasks: tasks/fstab/main.yml, tags: fstab }
+    - { import_tasks: tasks/symlinks/main.yml, tags: symlinks }
+    - { import_tasks: tasks/raspi-reset/main.yml, tags: raspi-reset }
 
   tasks:
-    - import_tasks: tasks/letsencrypt/main.yml
-    - import_tasks: tasks/apache/main.yml
-    - import_tasks: tasks/docker-containers/main.yml
-    - import_tasks: tasks/playlist-sync/main.yml
+    - { import_tasks: tasks/letsencrypt/main.yml, tags: letsencrypt }
+    - { import_tasks: tasks/apache/main.yml, tags: apache }
+    - { import_tasks: tasks/docker-containers/main.yml, tags: containers }
+    - { import_tasks: tasks/playlist-sync/main.yml, tags: playlist-sync }
 
     - name: Disable sudo with no password
+      tags: disable-sudo
       file:
         path: /etc/sudoers.d/010_pi-nopasswd
         state: absent
 
     - name: Add user {{ username }} to groups {{ ', '.join(user_groups) }}
+      tags: groups
       user:
         name: "{{ username }}"
         groups: "{{ user_groups }}"
         append: yes
 
     - name: Add SSH keys
+      tags: ssh-keys
       authorized_key:
         user: "{{ username }}"
         key: "{{ lookup('file', '{{ item }}') }}"
@@ -54,6 +58,7 @@
       loop: "{{ ssh_keys }}"
 
     - name: Copy some dotfiles
+      tags: dotfiles
       become: yes
       become_user: "{{ username }}"
       copy:

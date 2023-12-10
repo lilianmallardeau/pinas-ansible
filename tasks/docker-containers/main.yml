@@ -1,6 +1,5 @@
 ---
 - name: List containers
-  tags: containers
   set_fact:
     container_list: "{{ 'tasks/docker-containers/containers/*/docker-compose.yml' | fileglob | map('dirname') | map('basename') }}"
 
@@ -10,7 +9,6 @@
     state: directory
   loop: "{{ container_list }}"
   # with_filetree: 'tasks/docker-containers/containers/'
-  tags: containers
 
 - name: Copy compose files to /opt/docker-containers
   template:
@@ -20,7 +18,6 @@
     group: docker
     mode: 0640
   loop: "{{ container_list }}"
-  tags: containers
 
 - name: Start containers
   command: docker compose --ansi never --progress plain up -d
@@ -29,4 +26,3 @@
   loop: "{{ container_list }}"
   register: _docker_compose_up
   changed_when: "'Started' in _docker_compose_up.stderr"
-  tags: containers
