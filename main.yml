@@ -19,20 +19,22 @@
     - argon-eon
     - duckdns
     - wireguard
-    - nextcloud
-    - transmission
+    - docker
     - syncthing
+    - transmission
+    - nextcloud
 
   pre_tasks:
     - import_tasks: tasks/fstab/main.yml
     - import_tasks: tasks/symlinks/main.yml
     - import_tasks: tasks/raspi-reset/main.yml
+
+  tasks:
     - import_tasks: tasks/letsencrypt/main.yml
     - import_tasks: tasks/apache/main.yml
     - import_tasks: tasks/docker-containers/main.yml
     - import_tasks: tasks/playlist-sync/main.yml
 
-  tasks:
     - name: Disable sudo with no password
       file:
         path: /etc/sudoers.d/010_pi-nopasswd

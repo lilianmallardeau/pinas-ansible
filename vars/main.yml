@@ -5,8 +5,8 @@ dotfiles:
   - "~/.vimrc"
 
 # Argon EON
-argoneon_rtc_service_enabled: no
-argoneon_fan_lcd_service_enabled: yes
+argoneon_enable_rtc_service: no
+argoneon_enable_fan_lcd_service: yes
 
 # Nextcloud
 nextcloud_data_directory: /appdata/nextcloud
@@ -22,8 +22,8 @@ nextcloud_apps:
   - maps
 
 # Transmission
-transmission_download_dir: "/data/transmission/downloads"
-transmission_incomplete_dir: "/data/transmission/incomplete_downloads"
+transmission_download_dir: "/data/Transmission/Downloads"
+transmission_incomplete_dir: "/data/Transmission/Incomplete downloads"
 transmission_incomplete_dir_enabled: true
 
 # Syncthing
