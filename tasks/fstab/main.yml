@@ -1,4 +1,6 @@
 ---
+- { import_tasks: tmpfs.yml, tags: tmpfs }
+
 - name: Add mount points for hard drives
   mount:
     src: "{{ item.device }}"

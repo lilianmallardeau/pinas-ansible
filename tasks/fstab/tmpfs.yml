@@ -1,0 +1,24 @@
+---
+- name: Copy tmp.mount unit file to /etc/systemd/system
+  file:
+    src: /usr/share/systemd/tmp.mount
+    dest: /etc/systemd/system/tmp.mount
+    state: link
+    force: yes
+
+- name: Mount /tmp as tmpfs
+  systemd_service:
+    name: tmp.mount
+    enabled: yes
+  register: enable_tmp_mount
+
+- name: Empty /tmp
+  file:
+    path: /tmp
+    state: absent
+  when: enable_tmp_mount.status.ActiveState != 'active' and
+        enable_tmp_mount.status.SubState != 'mounted'
+
+- name: Reboot to apply changes
+  reboot:
+  when: enable_tmp_mount.changed
