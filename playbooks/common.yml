@@ -59,4 +59,5 @@
         name:
           - ffmpeg
         state: present
+        install_recommends: no
       when: install_media_tools
