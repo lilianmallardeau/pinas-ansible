@@ -13,5 +13,8 @@ services:
       DOMAIN: "https://{{ vaultwarden_domain }}"
       SIGNUPS_ALLOWED: false
       INVITATIONS_ALLOWED: false
-      ADMIN_TOKEN: "{{ vaultwarden_admin_token }}"
+      ADMIN_TOKEN: ${VAULTWARDEN_ADMIN_TOKEN}
       IP_HEADER: X-Forwarded-For
+      LOG_FILE: /data/vaultwarden.log
+      LOG_LEVEL: warn
+      EXTENDED_LOGGING: true

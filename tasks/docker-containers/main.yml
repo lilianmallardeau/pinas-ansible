@@ -19,6 +19,15 @@
     mode: 0640
   loop: "{{ container_list }}"
 
+- name: Copy env files
+  template:
+    src: "containers/{{ item }}/.env"
+    dest: "/opt/docker-containers/{{ item }}/.env"
+    owner: root
+    group: docker
+    mode: 0640
+  loop: "{{ container_list }}"
+
 - name: Start containers
   command: docker compose --ansi never --progress plain up -d
   args:
