@@ -19,6 +19,8 @@ bind_mounts:
 symlinks_dir:
   - link: /etc/letsencrypt
     target: /appdata/letsencrypt
+  - link: /var/lib/transmission-daemon
+    target: /appdata/transmission
   - link: /home/{{ username }}/.config
     target: /data/{{ username }}/.config
     owner: "{{ username }}"
