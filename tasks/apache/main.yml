@@ -4,6 +4,8 @@
     name: apache2
     state: present
 
+- import_tasks: after-wireguard.yml
+
 - name: Enable necessary apache modules
   apache2_module:
     name: "{{ item }}"
