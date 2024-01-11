@@ -1,0 +1,29 @@
+---
+- name: Install libpam-ssh-agent-auth
+  apt:
+    name: libpam-ssh-agent-auth
+    state: present
+
+- name: Enable pam_ssh_agent_auth for sudo in PAM config
+  lineinfile:
+    path: /etc/pam.d/sudo
+    line: "auth sufficient pam_ssh_agent_auth.so file=/etc/security/sudo_authorized_keys"
+    insertbefore: BOF
+
+- name: Setup sudo to preserve the SSH_AUTH_SOCK environment variable
+  copy:
+    content: Defaults env_keep += "SSH_AUTH_SOCK"
+    dest: /etc/sudoers.d/ssh_auth_sock
+    owner: root
+    group: root
+    mode: 0440
+
+- name: Import public SSH keys to /etc/security/sudo_authorized_keys
+  lineinfile:
+    path: /etc/security/sudo_authorized_keys
+    line: "{{ lookup('file', '{{ item }}') }}"
+    owner: root
+    group: root
+    mode: 0400
+    create: yes
+  loop: "{{ sudo_ssh_keys }}"

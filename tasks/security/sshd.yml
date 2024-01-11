@@ -1,0 +1,20 @@
+---
+- name: Configure sshd
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: "^(#)?{{item.key}}"
+    line: "{{item.key}} {{item.value}}"
+    state: present
+    validate: sshd -T -f %s
+  loop:
+    - { key: "Port", value: "22" }
+    - { key: "PermitRootLogin", value: "no" }
+    - { key: "PermitEmptyPasswords", value: "no" }
+    - { key: "PasswordAuthentication", value: "no" }
+  register: sshd_configuration
+
+- name: Restart sshd
+  service:
+    name: sshd
+    state: restarted
+  when: sshd_configuration.changed

@@ -32,6 +32,7 @@
     - { import_tasks: tasks/raspi-reset/main.yml, tags: raspi-reset }
 
   tasks:
+    - { import_tasks: tasks/security/main.yml, tags: security }
     - { import_tasks: tasks/letsencrypt/main.yml, tags: letsencrypt }
     - { import_tasks: tasks/apache/main.yml, tags: apache }
     - { import_tasks: tasks/docker-containers/main.yml, tags: containers }
