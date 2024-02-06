@@ -24,7 +24,7 @@
     - { role: lazydocker, tags: lazydocker }
     - { role: syncthing, tags: syncthing }
     - { role: transmission, tags: transmission }
-    - { role: nextcloud, tags: nextcloud }
+    # - { role: nextcloud, tags: nextcloud }
 
   pre_tasks:
     - { import_tasks: tasks/storage/main.yml, tags: storage }
