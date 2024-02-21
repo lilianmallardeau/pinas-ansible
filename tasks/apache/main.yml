@@ -36,7 +36,7 @@
     dest: /etc/apache2/ports.conf
     owner: root
     group: root
-    mode: 644
+    mode: 0644
   register: apache_ports_conf_file
 
 - name: Copy Apache config files and virtualhosts to /etc/apache2/
@@ -45,7 +45,7 @@
     dest: "/etc/apache2/{{ item | dirname | basename }}/{{ item.removesuffix('.j2') | basename }}"
     owner: root
     group: root
-    mode: 644
+    mode: 0644
   with_fileglob:
     - "sites-available/*.conf.j2"
     - "sites-available/*.conf"
