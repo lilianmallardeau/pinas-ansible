@@ -13,7 +13,9 @@
   loop:
     - ssl
     - macro
+    - headers
     - proxy_http
+    - proxy_wstunnel
   register: apache_modules
 
 - name: Restart apache2
