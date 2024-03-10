@@ -9,7 +9,7 @@ This repo holds the Ansible playbooks and tasks for my Raspberry Pi NAS. It's a 
 
 I use Debian as the base OS, and on top of it I've setup:
 
-- ZFS for storage (encrypted RAID1-like mirroring and snapshots)
+- ZFS for storage (RAID1-like mirroring and snapshots)
 - The Argon EON service to manage the fan speed according to the temperature
 - A [WireGuard](https://www.wireguard.com) tunnel to access my NAS from my devices anywhere
 - [DuckDNS](https://www.duckdns.org) for dynamic DNS

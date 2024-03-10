@@ -1,0 +1,10 @@
+---
+- name: Install ZFS
+  apt:
+    name: zfsutils-linux
+    state: present
+
+- name: Import ZFS pool
+  command:
+    cmd: zpool import nas
+    creates: /nas

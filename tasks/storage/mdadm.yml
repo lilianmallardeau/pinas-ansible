@@ -1,0 +1,10 @@
+---
+- name: Install mdadm
+  apt:
+    name: mdadm
+    state: present
+  register: mdadm_install
+
+- name: Reboot to automatically assemble arrays
+  reboot:
+  when: mdadm_install.changed

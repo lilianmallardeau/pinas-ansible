@@ -1,5 +1,7 @@
 ---
 - { import_tasks: tmpfs.yml, tags: tmpfs }
+- { import_tasks: mdadm.yml, tags: mdadm }
+- { import_tasks: zfs.yml, tags: zfs }
 
 - name: Add mount points for hard drives
   mount:

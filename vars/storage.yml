@@ -1,19 +1,14 @@
 ---
 # Disks
 disks:
-  - device: /dev/sda1
-    path: /mnt/hdd500
-    fs: ext4
-  - device: /dev/sdb1
-    path: /mnt/hdd750
+  - device: /dev/sda2
+    path: /mnt/hdd
     fs: ext4
 
 # Bind mounts
-bind_mounts:
-  - src: /mnt/hdd750/data
-    mnt: /data
-  - src: /mnt/hdd750/appdata
-    mnt: /appdata
+bind_mounts: []
+  # - src:
+  #   mnt:
 
 # Symlinks (folders only!)
 symlinks_dir:
