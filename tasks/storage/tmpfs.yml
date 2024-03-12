@@ -6,7 +6,7 @@
     state: link
     force: yes
 
-- name: Mount /tmp as tmpfs
+- name: Enable tmp.mount unit file
   systemd_service:
     name: tmp.mount
     enabled: yes
@@ -19,6 +19,7 @@
   when: enable_tmp_mount.status.ActiveState != 'active' and
         enable_tmp_mount.status.SubState != 'mounted'
 
-- name: Reboot to apply changes
-  reboot:
-  when: enable_tmp_mount.changed
+- name: Mount /tmp as tmpfs
+  systemd_service:
+    name: tmp.mount
+    state: started
