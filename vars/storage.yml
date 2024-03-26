@@ -1,7 +1,7 @@
 ---
 # Disks
 disks:
-  - device: /dev/sda2
+  - device: PARTLABEL=hdd
     path: /mnt/hdd
     fs: ext4
 
