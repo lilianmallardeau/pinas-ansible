@@ -1,0 +1,24 @@
+---
+- name: Install sanoid
+  apt:
+    name: sanoid
+    state: present
+
+- name: Create /etc/sanoid directory
+  file:
+    path: /etc/sanoid
+    state: directory
+
+- name: Copy sanoid.conf to /etc/sanoid/sanoid.conf
+  template:
+    src: sanoid.conf
+    dest: /etc/sanoid/sanoid.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable sanoid timer
+  systemd_service:
+    name: sanoid.timer
+    state: started
+    enabled: yes
