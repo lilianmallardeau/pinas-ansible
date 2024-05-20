@@ -13,10 +13,10 @@ bind_mounts: []
 # Symlinks (folders only!)
 symlinks_dir:
   - link: /etc/letsencrypt
-    target: /appdata/letsencrypt
+    target: /nas/appdata/letsencrypt
   - link: /var/lib/transmission-daemon
-    target: /appdata/transmission
+    target: /nas/appdata/transmission
   - link: /home/{{ username }}/.config
-    target: /data/{{ username }}/.config
+    target: /nas/data/{{ username }}/.config
     owner: "{{ username }}"
     group: "{{ username }}"

@@ -6,7 +6,7 @@ services:
     ports:
       - 127.0.0.1:{{ vaultwarden_port }}:80
     volumes:
-      - /appdata/vaultwarden:/data
+      - /nas/appdata/vaultwarden:/data
     environment:
       DOMAIN: "https://{{ vaultwarden_domain }}"
       SIGNUPS_ALLOWED: false

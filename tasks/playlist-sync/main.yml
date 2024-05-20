@@ -28,4 +28,4 @@
     name: playlist-sync
     user: "{{ username }}"
     special_time: reboot
-    job: tmux new-session -d -s playlist-sync "/data/Music/sync.sh; bash; "
+    job: tmux new-session -d -s playlist-sync "/nas/data/Music/sync.sh; bash; "

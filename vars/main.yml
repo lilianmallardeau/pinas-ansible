@@ -9,7 +9,7 @@ argoneon_enable_rtc_service: no
 argoneon_enable_fan_lcd_service: yes
 
 # Nextcloud
-nextcloud_data_directory: /appdata/nextcloud
+nextcloud_data_directory: /nas/appdata/nextcloud
 nextcloud_php_memory_limit: 4G
 nextcloud_enable_ssl: yes
 nextcloud_enable_hsts: yes
@@ -22,8 +22,8 @@ nextcloud_apps:
   - maps
 
 # Transmission
-transmission_download_dir: "/data/Transmission/Downloads"
-transmission_incomplete_dir: "/data/Transmission/Incomplete downloads"
+transmission_download_dir: "/nas/data/Transmission/Downloads"
+transmission_incomplete_dir: "/nas/data/Transmission/Incomplete downloads"
 transmission_incomplete_dir_enabled: true
 
 # Syncthing
