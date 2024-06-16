@@ -15,6 +15,7 @@
     - vars/main.yml
     - vars/storage.yml
     - vars/secrets.yml
+    - vars/samba.yml
 
   roles:
     - { role: argon-eon, tags: argon }
@@ -37,6 +38,7 @@
     - { import_tasks: tasks/apache/main.yml, tags: apache }
     - { import_tasks: tasks/docker-containers/main.yml, tags: containers }
     - { import_tasks: tasks/playlist-sync/main.yml, tags: playlist-sync }
+    - { import_tasks: tasks/samba/main.yml, tags: samba }
 
     - name: Disable sudo with no password
       tags: disable-sudo

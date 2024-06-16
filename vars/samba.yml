@@ -1,0 +1,19 @@
+---
+users:
+  user1:
+    password:
+    group:
+    uid:
+
+unix_groups:
+  group1:
+    gid:
+
+shares:
+  - name:
+    comment:
+    path:
+    readonly:
+    users:
+      - user1
+      - +group1

@@ -1,0 +1,56 @@
+---
+- name: Create UNIX groups
+  group:
+    name: "{{ item.groupname }}"
+    gid: "{{ item.group.gid }}"
+    state: present
+  loop: "{{ unix_groups | dict2items(key_name='groupname', value_name='group') }}"
+  loop_control:
+    label: "{{ item.groupname }}"
+
+- name: Create UNIX users
+  user:
+    name: "{{ item.username }}"
+    uid: "{{ item.user.uid }}"
+    group: "{{ item.user.group }}"
+    groups: "{{ item.user.groups | default(omit) }}"
+    shell: "{{ item.user.shell | default('/usr/sbin/nologin') }}"
+    home: "{{ item.user.home | default('/nas/users/' + item.username) }}"
+    skeleton: /dev/null
+    password_lock: true
+    state: present
+  loop: "{{ users | dict2items(key_name='username', value_name='user') }}"
+  loop_control:
+    label: "{{ item.username }}"
+
+- name: Install samba
+  apt:
+    name: samba
+    state: present
+
+- name: Copy configuration file to /etc/samba/smb.conf
+  template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: 0644
+    validate: testparm -s %s
+  register: smb_config_file
+
+- name: Create Samba users and set passwords
+  # NOTE: Task will report as OK (no change) if user already exists, even if password is changed
+  shell: >
+    (echo '{{ item.user.password }}'; echo '{{ item.user.password }}')
+    | smbpasswd -a -s {{ item.username }}
+  loop: "{{ users | dict2items(key_name='username', value_name='user') }}"
+  loop_control:
+    label: "{{ item.username }}"
+  register: smbpasswd
+  changed_when: "'Added user' in smbpasswd.stdout"
+
+- name: Restart smbd
+  service:
+    name: smbd
+    state: restarted
+  when: smb_config_file.changed

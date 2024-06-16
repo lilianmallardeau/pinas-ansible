@@ -1,0 +1,37 @@
+[global]
+    server role = standalone
+    obey pam restrictions = yes
+    unix password sync = no
+    map to guest = never
+
+    browseable = no
+    guest ok = no
+
+[homes]
+    read only = no
+    browseable = no
+    guest ok = no
+    create mask = 0600
+    directory mask = 0700
+    valid users = %S
+
+{% for share in shares %}
+[{{ share.name }}]
+{% if share.inherit is defined %}
+    copy = {{ share.inherit }}
+{% endif %}
+{% if share.comment is defined %}
+    comment = {{ share.comment }}
+{% endif %}
+    path = {{ share.path }}
+    read only = {{ share.readonly | default(True) | ternary('yes', 'no') }}
+    browseable = {{ share.browsable | default(False) | ternary('yes', 'no') }}
+    guest ok = {{ share.guest_ok | default(False) | ternary('yes', 'no') }}
+    create mask = {{ share.create_mask | default('0660') }}
+    directory mask = {{ share.directory_mask | default('0770') }}
+    valid users = {{ share.users | default([]) | join(', ') }}
+{% if share.allow_hosts is defined %}
+    hosts allow = {{ share.allow_hosts | join(', ') }}
+{% endif %}
+
+{% endfor %}
