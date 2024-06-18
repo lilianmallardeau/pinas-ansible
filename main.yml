@@ -46,11 +46,11 @@
         path: /etc/sudoers.d/010_pi-nopasswd
         state: absent
 
-    - name: Add user {{ username }} to groups {{ ', '.join(user_groups) }}
+    - name: Add user {{ username }} to groups {{ ', '.join(user_groups + unix_groups | list) }}
       tags: groups
       user:
         name: "{{ username }}"
-        groups: "{{ user_groups }}"
+        groups: "{{ user_groups + unix_groups | list }}"
         append: yes
 
     - name: Add SSH keys
