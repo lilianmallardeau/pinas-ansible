@@ -1,0 +1,18 @@
+---
+default_interface: eth0
+
+firewall_rules:
+  - comment: Allow SSH on {{ default_interface }}
+    rule: allow
+    interface_in: "{{ default_interface }}"
+    app: ssh
+
+  - comment: Allow port {{ wireguard_listen_port }}/udp for WireGuard on {{ default_interface }}
+    rule: allow
+    interface_in: "{{ default_interface }}"
+    port: "{{ wireguard_listen_port }}"
+    proto: udp
+
+  - comment: Allow all traffic on WireGuard interface
+    interface_in: "{{ wireguard_interface_name }}"
+    rule: allow

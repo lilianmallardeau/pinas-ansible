@@ -1,0 +1,37 @@
+---
+- name: Install ufw
+  apt:
+    name: ufw
+    state: present
+
+- name: Set ufw rules
+  ufw:
+    comment: "{{ rule.comment | default(omit) }}"
+    interface: "{{ rule.interface | default(omit) }}"
+    direction: "{{ rule.direction | default(omit) }}"
+    interface_in: "{{ rule.interface_in | default(omit) }}"
+    interface_out: "{{ rule.interface_out | default(omit) }}"
+    from_ip: "{{ rule.from | default(omit) }}"
+    from_port: "{{ rule.from_port | default(omit) }}"
+    to_ip: "{{ rule.to | default(omit) }}"
+    to_port: "{{ rule.port | default(omit) }}"
+    proto: "{{ rule.proto | default(omit) }}"
+    app: "{{ rule.app | default(omit) }}"
+    rule: "{{ rule.rule | default(omit) }}"
+    log: "{{ rule.log | default(omit) }}"
+    route: "{{ rule.route | default(omit) }}"
+  loop: "{{ firewall_rules }}"
+  loop_control:
+    loop_var: rule
+    label: "{{ rule.comment | default(omit) }}"
+  register: ufw_rules
+
+- name: Enable ufw
+  ufw:
+    state: enabled
+    policy: deny
+
+- name: Reload ufw
+  ufw:
+    state: reloaded
+  when: ufw_rules.changed
