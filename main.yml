@@ -41,12 +41,6 @@
     - { import_tasks: tasks/playlist-sync/main.yml, tags: playlist-sync }
     - { import_tasks: tasks/samba/main.yml, tags: samba }
 
-    - name: Disable sudo with no password
-      tags: disable-sudo
-      file:
-        path: /etc/sudoers.d/010_pi-nopasswd
-        state: absent
-
     - name: Add user {{ username }} to groups {{ ', '.join(user_groups + unix_groups | list) }}
       tags: groups
       user:

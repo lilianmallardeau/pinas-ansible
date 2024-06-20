@@ -1,0 +1,5 @@
+---
+- name: Disable sudo with no password
+  file:
+    path: /etc/sudoers.d/010_pi-nopasswd
+    state: absent
