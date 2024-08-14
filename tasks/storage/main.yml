@@ -13,6 +13,7 @@
   loop: "{{ disks }}"
 
 - name: Add bind mounts
+  tags: bind-mounts
   mount:
     src: "{{ item.src }}"
     path: "{{ item.mnt }}"
