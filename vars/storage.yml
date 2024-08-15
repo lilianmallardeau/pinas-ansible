@@ -16,7 +16,3 @@ symlinks_dir:
     target: /nas/appdata/letsencrypt
   - link: /var/lib/transmission-daemon
     target: /nas/appdata/transmission
-  - link: /home/{{ username }}/.config
-    target: /nas/data/{{ username }}/.config
-    owner: "{{ username }}"
-    group: "{{ username }}"

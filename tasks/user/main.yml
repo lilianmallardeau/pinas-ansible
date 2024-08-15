@@ -1,0 +1,34 @@
+---
+- name: Add SSH keys for user {{ username }} in both old and new homes
+  tags: ssh-keys
+  authorized_key:
+    user: "{{ username }}"
+    path: "{{ item.0 }}"
+    key: "{{ lookup('file', '{{ item.1 }}') }}"
+    state: present
+  loop: "{{ authorized_keys_files | unique | product(ssh_keys) }}"
+  vars:
+    authorized_keys_files:
+      - /home/{{ username }}/.ssh/authorized_keys
+      - /nas/users/{{ username }}/.ssh/authorized_keys
+
+- name: Bind mount {{ username }} home (/nas/users/{{ username }}) to /home/{{ username }}
+  tags: user-home
+  mount:
+    src: /nas/users/{{ username }}
+    path: /home/{{ username }}
+    opts: bind
+    fstype: none
+    state: mounted
+  # user:
+  #   name: "{{ username }}"
+  #   home: "/nas/users/{{ username }}"
+
+- name: Copy some dotfiles
+  tags: dotfiles
+  become: yes
+  become_user: "{{ username }}"
+  copy:
+    src: "{{ item }}"
+    dest: "{{ item }}"
+  loop: "{{ dotfiles }}"
