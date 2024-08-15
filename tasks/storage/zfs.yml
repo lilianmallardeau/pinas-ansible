@@ -15,3 +15,9 @@
   command:
     cmd: zpool import nas
     creates: /nas
+
+- name: Enable monthly scrub
+  systemd_service:
+    name: zfs-scrub-monthly@nas.timer
+    state: started
+    enabled: yes
