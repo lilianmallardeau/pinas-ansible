@@ -2,7 +2,7 @@
 - name: Copy the raspi-reset and prepare-reset scripts
   template:
     src: "{{ item }}"
-    dest: /sbin/{{ item }}
+    dest: /usr/local/sbin/{{ item }}
     owner: root
     group: root
     mode: 0754
