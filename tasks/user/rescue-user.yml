@@ -1,0 +1,15 @@
+---
+- name: Create a rescue user in case things go wrong with the zfs pool
+  user:
+    name: fuck
+    uid: 1001
+    groups: sudo
+    state: present
+
+- name: Add SSH keys to the rescue user
+  tags: ssh-keys
+  authorized_key:
+    user: fuck
+    key: "{{ lookup('file', '{{ item }}') }}"
+    state: present
+  loop: "{{ ssh_keys }}"

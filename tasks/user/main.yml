@@ -1,4 +1,6 @@
 ---
+- { import_tasks: rescue-user.yml, tags: rescue-user }
+
 - name: Add SSH keys for user {{ username }} in both old and new homes
   tags: ssh-keys
   authorized_key:
@@ -12,7 +14,7 @@
       - /home/{{ username }}/.ssh/authorized_keys
       - /nas/users/{{ username }}/.ssh/authorized_keys
 
-- name: Bind mount {{ username }} home (/nas/users/{{ username }}) to /home/{{ username }}
+- name: Bind mount {{ username }} home (/nas/users/{{ username }} -> /home/{{ username }})
   tags: user-home
   mount:
     src: /nas/users/{{ username }}
@@ -20,6 +22,7 @@
     opts: bind
     fstype: none
     state: mounted
+  # remote_user: fuck
   # user:
   #   name: "{{ username }}"
   #   home: "/nas/users/{{ username }}"
