@@ -21,15 +21,9 @@ nextcloud_apps:
   - unsplash
   - maps
 
-# Transmission
-transmission_download_dir: "/nas/data/Transmission/Downloads"
-transmission_incomplete_dir: "/nas/data/Transmission/Incomplete downloads"
-transmission_incomplete_dir_enabled: true
-
 # Syncthing
 syncthing_enable_service: yes
 syncthing_user: "{{ username }}"
 
 # Groups
-user_groups:
-  - debian-transmission
+user_groups: []

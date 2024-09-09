@@ -14,5 +14,3 @@ bind_mounts: []
 symlinks_dir:
   - link: /etc/letsencrypt
     target: /nas/appdata/letsencrypt
-  - link: /var/lib/transmission-daemon
-    target: /nas/appdata/transmission

@@ -1,0 +1,22 @@
+---
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Etc/UTC
+      USER: ${TRANSMISSION_USER}
+      PASS: ${TRANSMISSION_PASS}
+      PEERPORT: 51413
+      HOST_WHITELIST: "127.0.0.1"
+    volumes:
+      - /nas/appdata/transmission:/config
+      - /nas/data/Transmission/downloads:/downloads
+      - /nas/data/Transmission/watch:/watch
+    ports:
+      - 127.0.0.1:9091:9091
+      - 51413:51413/tcp
+      - 51413:51413/udp
+    restart: unless-stopped
