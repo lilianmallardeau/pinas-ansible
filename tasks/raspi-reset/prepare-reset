@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+SYSTEMD_SERVICES=(syncthing@{{ username }} transmission-daemon sanoid.timer)
+
+# Check if running as root
+if [ $EUID -ne 0 ]; then
+    echo Must be run as root 1>&2
+    exit 1
+fi
+
+# Stop all docker containers
+for compose_file in /opt/docker-containers/*/docker-compose.yml; do
+    docker compose -f "$compose_file" down
+done
+
+# Stop systemd services
+for service in "${SYSTEMD_SERVICES[@]}"; do
+    systemctl stop $service
+done
+
+# Export zpool
+zpool export nas

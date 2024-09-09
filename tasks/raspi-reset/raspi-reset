@@ -1,34 +1,48 @@
 #!/bin/bash
 BS=64M
-DISK_ID=0xa3f161f3
 ROOT_DEV=/dev/mmcblk0
 BOOTFS_BACKUP=${ROOT_DEV}p3
 BOOTFS_TARGET=${ROOT_DEV}p1
 ROOTFS_BACKUP=${ROOT_DEV}p2
 ROOTFS_TARGET=${ROOT_DEV}p4
 
+print_yellow() {
+    echo -e "\033[1;33m${1}\033[0m"
+}
+
+print_blue() {
+    echo -e "\033[1;34m${1}\033[0m"
+}
+
 if [ $EUID -ne 0 ]; then
-    echo Must be run as root 1>&2
+    echo "Must be run as root" 1>&2
     exit 1
 fi
 
-echo Remounting disks read-only...
+if [ ! -f /etc/rpi-disk-id ]; then
+    echo "/etc/rpi-disk-id not found" 1>&2
+    exit 2
+fi
+
+DISK_ID="$(cat /etc/rpi-disk-id)"
+
+print_yellow "Remounting disks read-only..."
 echo 1 > /proc/sys/kernel/sysrq
 echo u > /proc/sysrq-trigger
 
-echo Overwritting bootfs...
+print_yellow "\nOverwritting bootfs..."
 dd if=$BOOTFS_BACKUP of=$BOOTFS_TARGET bs=$BS status=progress
 
-echo Overwritting rootfs...
+print_yellow "\nOverwritting rootfs..."
 dd if=$ROOTFS_BACKUP of=$ROOTFS_TARGET bs=$BS status=progress
 
-echo Restoring original disk id...
+print_yellow "\nRestoring original disk id..."
 sfdisk --disk-id $ROOT_DEV $DISK_ID
 
-# echo Checking and resizing filesystem...
+# print_yellow "\nChecking and resizing filesystem..."
 # e2fsck -f $ROOTFS_TARGET
 # resize2fs $ROOTFS_TARGET
 
-echo Done! Rebooting
+print_blue "\nDone! Rebooting"
 sleep 1
 echo b > /proc/sysrq-trigger

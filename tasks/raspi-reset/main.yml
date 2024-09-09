@@ -1,8 +1,11 @@
 ---
-- name: Copy the raspi-reset script
-  copy:
-    src: raspi-reset
-    dest: /sbin/raspi-reset
+- name: Copy the raspi-reset and prepare-reset scripts
+  template:
+    src: "{{ item }}"
+    dest: /sbin/{{ item }}
     owner: root
     group: root
-    mode: 0755
+    mode: 0754
+  loop:
+    - prepare-reset
+    - raspi-reset
