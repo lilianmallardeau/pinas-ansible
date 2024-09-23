@@ -7,6 +7,7 @@ services:
     ports:
       - 127.0.0.1:4533:4533
     environment:
+      ND_PORT: 4533
       ND_BASEURL: https://music.{{ main_domain }}
       ND_LASTFM_APIKEY: ${ND_LASTFM_APIKEY}
       ND_LASTFM_SECRET: ${ND_LASTFM_SECRET}
