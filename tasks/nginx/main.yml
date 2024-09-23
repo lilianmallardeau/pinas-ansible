@@ -1,0 +1,61 @@
+---
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Create /etc/letsencrypt/options-ssl-nginx.conf for nginx SSL config
+  command:
+    cmd: certbot install
+    stdin: "c"
+    creates: /etc/letsencrypt/options-ssl-nginx.conf
+  register: certbot_gen_nginx_config
+  failed_when: certbot_gen_nginx_config.rc > 1
+
+- name: Copy main Nginx config files to /etc/nginx/nginx.conf
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+  register: nginx_main_config
+
+- name: Copy Nginx config files to /etc/nginx/conf.d
+  template:
+    src: "{{ item }}"
+    dest: "/etc/nginx/conf.d/{{ item.removesuffix('.j2') | basename }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_fileglob: conf.d/*
+  register: nginx_config_files
+
+- name: Copy Nginx vhosts config files to /etc/nginx/sites-available
+  template:
+    src: "{{ item }}"
+    dest: "/etc/nginx/sites-available/{{ item | basename }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_fileglob: sites-available/*
+  register: nginx_vhosts_files
+
+- name: Make symlinks for vhosts
+  file:
+    src: /etc/nginx/sites-available/{{ item | basename }}
+    dest: /etc/nginx/sites-enabled/{{ item | basename }}
+    state: link
+    force: yes
+  with_fileglob: sites-available/*
+  register: nginx_vhosts_symlinks
+
+- name: Reload nginx
+  service:
+    name: nginx
+    state: reloaded
+  when: >
+    nginx_main_config.changed or
+    nginx_config_files.changed or
+    nginx_vhosts_files.changed or
+    nginx_vhosts_symlinks.changed
