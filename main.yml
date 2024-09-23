@@ -36,7 +36,7 @@
   tasks:
     - { import_tasks: tasks/security/main.yml, tags: security }
     - { import_tasks: tasks/letsencrypt/main.yml, tags: letsencrypt }
-    - { import_tasks: tasks/apache/main.yml, tags: apache }
+    - { import_tasks: tasks/nginx/main.yml, tags: nginx }
     - { import_tasks: tasks/docker-containers/main.yml, tags: containers }
     - { import_tasks: tasks/playlist-sync/main.yml, tags: playlist-sync }
     - { import_tasks: tasks/samba/main.yml, tags: samba }
