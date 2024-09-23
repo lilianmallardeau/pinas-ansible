@@ -1,0 +1,4 @@
+{% set subdomain = "music" %}
+{% set port = 4533 %}
+
+{% extends ".proxy-template.j2" %}
