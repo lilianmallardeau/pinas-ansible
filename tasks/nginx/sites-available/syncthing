@@ -1,0 +1,8 @@
+{% set subdomain = "syncthing" %}
+{% set port = 8384 %}
+
+{% extends ".proxy-template.j2" %}
+
+{% block proxy_params %}
+proxy_set_header Host localhost;
+{% endblock %}
