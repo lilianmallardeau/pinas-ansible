@@ -24,6 +24,7 @@
       apt:
         name:
           - bat
+          - btop
           - command-not-found
           - cryptsetup
           - curl
