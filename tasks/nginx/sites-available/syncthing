@@ -1,5 +1,5 @@
-{% set subdomain = "syncthing" %}
-{% set port = 8384 %}
+{% set subdomain = services.syncthing.subdomain %}
+{% set port = services.syncthing.port %}
 
 {% extends ".proxy-template.j2" %}
 

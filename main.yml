@@ -15,6 +15,7 @@
     - vars/main.yml
     - vars/storage.yml
     - vars/secrets.yml
+    - vars/services.yml
     - vars/firewall.yml
     - vars/samba.yml
 

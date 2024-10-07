@@ -1,4 +1,4 @@
-{% set subdomain = "music" %}
-{% set port = 4533 %}
+{% set subdomain = services.navidrome.subdomain %}
+{% set port = services.navidrome.port %}
 
 {% extends ".proxy-template.j2" %}

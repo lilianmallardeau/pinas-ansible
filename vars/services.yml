@@ -1,0 +1,17 @@
+---
+services:
+  vaultwarden: 
+    subdomain: passwords
+    port: 8080
+
+  syncthing: 
+    subdomain: syncthing
+    port: 8384
+
+  transmission: 
+    subdomain: transmission
+    port: 9091
+
+  navidrome: 
+    subdomain: music
+    port: 4533
