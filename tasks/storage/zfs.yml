@@ -5,6 +5,11 @@
     filename: backports
     update_cache: yes
 
+- name: Install raspberrypi-kernel-headers
+  apt:
+    name: raspberrypi-kernel-headers
+    state: present
+
 - name: Install ZFS
   apt:
     name: zfsutils-linux
