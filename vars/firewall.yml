@@ -1,18 +1,42 @@
 ---
-default_interface: eth0
+internet_interface: eth0
 
 firewall_rules:
-  - comment: Allow SSH on {{ default_interface }}
+  # SSH from internet
+  - comment: Allow SSH on {{ internet_interface }}
     rule: allow
-    interface_in: "{{ default_interface }}"
+    interface_in: "{{ internet_interface }}"
     app: ssh
 
-  - comment: Allow port {{ wireguard_listen_port }}/udp for WireGuard on {{ default_interface }}
+  # WireGuard from internet
+  - comment: Allow port {{ wireguard_listen_port }}/udp for WireGuard on {{ internet_interface }}
     rule: allow
-    interface_in: "{{ default_interface }}"
+    interface_in: "{{ internet_interface }}"
     port: "{{ wireguard_listen_port }}"
     proto: udp
 
-  - comment: Allow all traffic on WireGuard interface
+  # All access via WireGuard
+  - comment: Allow all traffic on WireGuard interface from 10.0.1.0/24
     interface_in: "{{ wireguard_interface_name }}"
+    from: 10.0.1.0/24
+    rule: allow
+
+  - comment: Allow all traffic on WireGuard interface from fd00:6969:420:1::/64
+    interface_in: "{{ wireguard_interface_name }}"
+    from: fd00:6969:420:1::/64
+    rule: allow
+
+  # Samba via WireGuard
+  - comment: Allow smb on WireGuard interface from 10.0.2.0/24
+    interface_in: "{{ wireguard_interface_name }}"
+    from: 10.0.2.0/24
+    port: 445
+    proto: tcp
+    rule: allow
+
+  - comment: Allow smb on WireGuard interface from fd00:6969:420:2::/64
+    interface_in: "{{ wireguard_interface_name }}"
+    from: fd00:6969:420:2::/64
+    port: 445
+    proto: tcp
     rule: allow
