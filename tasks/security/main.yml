@@ -4,3 +4,4 @@
 - { import_tasks: sudo-ssh-agent-auth.yml, tags: sudo-ssh-agent-auth }
 - { import_tasks: unattended-upgrades.yml, tags: unattended-upgrades }
 - { import_tasks: disable-sudo-nopasswd.yml, tags: disable-sudo-nopasswd }
+- { import_tasks: ssh-login-notify.yml, tags: ssh-login-notify }

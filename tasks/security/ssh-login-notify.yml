@@ -1,0 +1,23 @@
+---
+- name: Copy ssh-login-notify script to /usr/local/sbin
+  copy:
+    content: |
+      #!/bin/bash
+      if [ "$PAM_TYPE" != "close_session" ]; then
+        [[ "$PAM_RHOST" = 10.0.1.* ]] && exit
+        subject="SSH Login: $PAM_USER from $PAM_RHOST on $(hostname)"
+        message="$(env)"
+        curl -H "Title: $subject" -d "$message" localhost:{{ services.ntfy.port }}/ssh
+      fi
+    dest: /usr/local/sbin/ssh-login-notify
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Add PAM config to /etc/pam.d/sshd to run ssh-login-notify on SSH login
+  blockinfile:
+    path: /etc/pam.d/sshd
+    prepend_newline: yes
+    block: |
+      # Send login notification
+      session optional pam_exec.so quiet seteuid /usr/local/sbin/ssh-login-notify

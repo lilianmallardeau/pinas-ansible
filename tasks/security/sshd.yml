@@ -8,9 +8,11 @@
     validate: sshd -T -f %s
   loop:
     - { key: "Port", value: "22" }
+    - { key: "UsePAM", value: "yes" }
     - { key: "PermitRootLogin", value: "no" }
     - { key: "PermitEmptyPasswords", value: "no" }
     - { key: "PasswordAuthentication", value: "no" }
+    - { key: "KbdInteractiveAuthentication", value: "no" }
   register: sshd_configuration
 
 - name: Restart sshd
