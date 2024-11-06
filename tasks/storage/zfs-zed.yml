@@ -1,0 +1,36 @@
+---
+- name: Install zfs-zed
+  apt:
+    name: zfs-zed
+    state: present
+
+- name: Set variables in /etc/zfs/zed.d/zed.rc
+  copy:
+    content: |
+      ZED_NOTIFY_VERBOSE=1
+      ZED_NOTIFY_DATA=1
+      ZED_USE_ENCLOSURE_LEDS=1
+      ZED_NTFY_TOPIC="zfs"
+      ZED_NTFY_URL="http://localhost:{{ services.ntfy.port }}"
+    dest: /etc/zfs/zed.d/zed.rc
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy zedlets to /etc/zfs/zed.d
+  template:
+    src: "{{ zedlet }}"
+    dest: /etc/zfs/zed.d/{{ zedlet | basename }}
+    owner: root
+    group: root
+    mode: 0755
+  with_fileglob: zed.d/*
+  loop_control:
+    loop_var: zedlet
+    label: "{{ zedlet }}"
+
+- name: Enable zfs-zed service
+  service:
+    name: zfs-zed
+    state: started
+    enabled: yes
