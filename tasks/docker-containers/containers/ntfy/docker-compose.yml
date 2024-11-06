@@ -1,0 +1,26 @@
+services:
+  ntfy:
+    image: binwiederhier/ntfy
+    container_name: ntfy
+    command: serve
+    # user: UID:GID
+    environment:
+      NTFY_BASE_URL: https://{{ services.ntfy.subdomain }}.{{ main_domain }}
+      NTFY_BEHIND_PROXY: true
+      NTFY_CACHE_FILE: /var/cache/ntfy/cache.db
+      NTFY_CACHE_DURATION: 24h
+      NTFY_ATTACHMENT_CACHE_DIR: /var/cache/ntfy/attachments
+      NTFY_ATTACHMENT_EXPIRY_DURATION: 24h
+      # NTFY_LOG_FORMAT: json
+      # NTFY_LOG_FILE: /var/log/ntfy.log
+    volumes:
+      - /var/cache/ntfy:/var/cache/ntfy
+    ports:
+      - 127.0.0.1:{{ services.ntfy.port }}:80
+    healthcheck:
+        test: ["CMD-SHELL", "wget -q --tries=1 http://localhost:80/v1/health -O - | grep -Eo '\"healthy\"\\s*:\\s*true' || exit 1"]
+        interval: 60s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
+    restart: unless-stopped

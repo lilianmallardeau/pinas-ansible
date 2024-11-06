@@ -15,3 +15,7 @@ services:
   navidrome: 
     subdomain: music
     port: 4533
+
+  ntfy:
+    subdomain: ntfy
+    port: 6666

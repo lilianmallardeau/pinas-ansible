@@ -1,0 +1,17 @@
+{% set subdomain = services.ntfy.subdomain %}
+{% set port = services.ntfy.port %}
+
+{% extends ".proxy-template.j2" %}
+
+{% block proxy_params %}
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection "upgrade";
+
+proxy_connect_timeout 3m;
+proxy_send_timeout 3m;
+proxy_read_timeout 3m;
+
+# Stream request body to backend
+client_max_body_size 0;
+{% endblock %}
