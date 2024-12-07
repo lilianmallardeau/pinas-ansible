@@ -1,0 +1,18 @@
+[submodule "roles/argon-eon"]
+	path = roles/argon-eon
+	url = https://github.com/yayuniversal/argon-eon-ansible-role
+[submodule "roles/duckdns"]
+	path = roles/duckdns
+	url = https://github.com/yayuniversal/duckdns-ansible-role
+[submodule "roles/wireguard"]
+	path = roles/wireguard
+	url = https://github.com/yayuniversal/wireguard-ansible-role
+[submodule "roles/docker"]
+	path = roles/docker
+	url = https://github.com/yayuniversal/docker-ansible-role
+[submodule "roles/lazydocker"]
+	path = roles/lazydocker
+	url = https://github.com/yayuniversal/lazydocker-ansible-role
+[submodule "roles/syncthing"]
+	path = roles/syncthing
+	url = https://github.com/yayuniversal/syncthing-ansible-role
