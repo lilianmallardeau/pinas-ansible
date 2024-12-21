@@ -35,9 +35,11 @@
           - lsd
           - lshw
           - lsof
+          - lvm2
           - ncdu
           - pv
           - python3
+          - stow
           - tcpdump
           - tmux
           - tree
