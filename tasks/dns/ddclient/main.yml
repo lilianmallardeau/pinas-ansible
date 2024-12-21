@@ -1,0 +1,19 @@
+---
+- name: Install ddclient
+  apt:
+    name: ddclient
+    state: present
+
+- name: Copy ddclient configuration file to /etc/ddclient.conf
+  template:
+    src: ddclient.conf
+    dest: /etc/ddclient.conf
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Start and enable ddclient systemd service
+  service:
+    name: ddclient
+    state: started
+    enabled: yes
