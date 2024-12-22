@@ -29,6 +29,7 @@
           - cryptsetup
           - curl
           - fd-find
+          - fish
           - git
           - htop
           - jq
