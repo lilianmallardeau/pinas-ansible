@@ -47,3 +47,24 @@
         -d "*.{{ main_domain }}"
   register: certbot_call
   changed_when: "'no action taken' not in certbot_call.stdout"
+
+# --- Automatic renewal ---
+- name: Install cron
+  apt:
+    name: cron
+    state: present
+
+- name: Enable cron service
+  service:
+    name: cron
+    state: started
+    enabled: yes
+
+- name: Add cron job to renew certificates automatically
+  cron:
+    name: certbot-renew
+    user: root
+    special_time: daily
+    job: /usr/local/sbin/certbot renew --quiet
+    state: present    
+    cron_file: certbot-renew
