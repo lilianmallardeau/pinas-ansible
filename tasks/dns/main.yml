@@ -1,0 +1,2 @@
+---
+- { import_tasks: ddclient/main.yml, tags: ddclient }

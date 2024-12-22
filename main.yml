@@ -21,7 +21,6 @@
 
   roles:
     - { role: argon-eon, tags: argon }
-    - { role: duckdns, tags: duckdns }
     - { role: wireguard, tags: wireguard }
     - { role: docker, tags: docker }
     - { role: lazydocker, tags: lazydocker }
@@ -36,7 +35,8 @@
 
   tasks:
     - { import_tasks: tasks/security/main.yml, tags: security }
-    - { import_tasks: tasks/letsencrypt/main.yml, tags: letsencrypt }
+    - { import_tasks: tasks/dns/main.yml, tags: dns }
+    - { import_tasks: tasks/certbot/main.yml, tags: certbot }
     - { import_tasks: tasks/nginx/main.yml, tags: nginx }
     - { import_tasks: tasks/docker-containers/main.yml, tags: containers }
     - { import_tasks: tasks/playlist-sync/main.yml, tags: playlist-sync }

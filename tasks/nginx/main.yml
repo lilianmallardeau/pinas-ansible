@@ -4,13 +4,13 @@
     name: nginx
     state: present
 
-- name: Create /etc/letsencrypt/options-ssl-nginx.conf for nginx SSL config
-  command:
-    cmd: certbot install
-    stdin: "c"
-    creates: /etc/letsencrypt/options-ssl-nginx.conf
-  register: certbot_gen_nginx_config
-  failed_when: certbot_gen_nginx_config.rc > 1
+# - name: Create /etc/letsencrypt/options-ssl-nginx.conf for nginx SSL config
+#   command:
+#     cmd: certbot install
+#     stdin: "c"
+#     creates: /etc/letsencrypt/options-ssl-nginx.conf
+#   register: certbot_gen_nginx_config
+#   failed_when: certbot_gen_nginx_config.rc > 1
 
 - name: Copy main Nginx config files to /etc/nginx/nginx.conf
   template:
