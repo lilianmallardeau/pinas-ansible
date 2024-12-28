@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-SYSTEMD_SERVICES=(syncthing@{{ username }} sanoid.timer)
+SYSTEMD_SERVICES=(syncthing@{{ username }} sanoid.timer cron smbd)
 
 # Check if running as root
 if [ $EUID -ne 0 ]; then
