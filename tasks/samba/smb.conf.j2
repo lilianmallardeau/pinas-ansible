@@ -1,11 +1,22 @@
 [global]
+    server string = %h
     server role = standalone
     obey pam restrictions = yes
     unix password sync = no
+    use sendfile = yes
     map to guest = never
-
     browseable = no
     guest ok = no
+    server smb encrypt = desired
+
+    # macOS / iOS compatibility
+    vfs objects = fruit streams_xattr 
+    fruit:aapl = yes
+    fruit:nfs_aces = no
+    ; fruit:model = Xserve
+    ; fruit:encoding = native
+    ; fruit:resource = stream
+    ; fruit:metadata = stream
 
 [homes]
     read only = no
@@ -29,6 +40,8 @@
     guest ok = {{ share.guest_ok | default(False) | ternary('yes', 'no') }}
     create mask = {{ share.create_mask | default('0660') }}
     directory mask = {{ share.directory_mask | default('0770') }}
+    force create mode = {{ share.force_create_mode | default('0660') }}
+    force directory mode = {{ share.force_directory_mode | default('0770') }}
     valid users = {{ share.users | default([]) | join(', ') }}
 {% if share.allow_hosts is defined %}
     hosts allow = {{ share.allow_hosts | join(', ') }}
